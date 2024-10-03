@@ -1,32 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import { CardNumber } from '../../components/CardNumber';
 import { InputAddTask } from '../../components/EditText';
 import { ButtonFilter } from '../../components/ButtonFilter';
 import { Feather } from "@expo/vector-icons";
-import React, { useContext, useEffect, useState } from 'react';
-import TaskContext from '../../context/TaskContext';
+import React, {useEffect, useState } from 'react';
 import { Task } from '../../components/Task';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { taskContent } from '../../utils/types';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
+import { NewTaskScreenNavigationProp } from '../../utils/types';
 
 export function Home() {
 
   const [taskData, setTaskData] = useState<taskContent[]>(null);
-
-  function handleAddTask() {
-
-  }
-
-  function setTaskText() {
-
-  }
-
-  function handleFiter() {
-
-  }
-
-  
+  const [amountTask, setAmountTask] = useState<number>(0);
+  const [openTask, setOpenTask] = useState<number>(0);
+  const [closedTask, setClosedTask] = useState<number>(0);
+  const navigation = useNavigation<NewTaskScreenNavigationProp>();
 
   useEffect(() => {
     const getData = async (): Promise<taskContent[]> => {
@@ -34,6 +26,22 @@ export function Home() {
         const taskData = await AsyncStorage.getItem("task");
 
         const taskItemsData = taskData ? JSON.parse(taskData) : [];
+        setAmountTask(taskItemsData.length)
+
+        let closed: number = 0;
+        let open: number = 0;
+
+        for( let i in taskItemsData){
+          if(taskItemsData[i].status){
+            open += 1;
+          }else{
+            closed += 1;
+          }
+
+          setClosedTask(closed);
+          setOpenTask(open)
+
+        }
 
         return taskItemsData;
       } catch {
@@ -60,9 +68,6 @@ export function Home() {
       await AsyncStorage.setItem('task', JSON.stringify(taskWithOutDeleted));
 
       setTaskData(taskWithOutDeleted);
-  
-
-    
   }
 
   const handleChageStatus = async (id: string, newStatus: boolean) =>{
@@ -80,6 +85,22 @@ export function Home() {
 
   }
 
+  const handleNavigation = () =>{
+
+    navigation.navigate('NewTask')
+
+  }
+
+  const handleAddTask = () =>{
+
+  }
+
+  const setTaskText = () =>{
+    
+  }
+  const handleFiter = () =>{
+    
+  }
 return (
   <View style={styles.container}>
     <InputAddTask onPress={handleAddTask} onChangeText={setTaskText} value={''} />
@@ -87,14 +108,14 @@ return (
     <View style={{ flexDirection: 'row', gap: 16 }}>
       <CardNumber
         title={'Cadastradas'}
-        num={1} color={'#1E1E1E'} />
+        num={amountTask} color={'#1E1E1E'} />
       <CardNumber
         title={'Em aberto'}
-        num={2} color={'#FA9216'}
+        num={openTask} color={'#FA9216'}
       />
       <CardNumber
         title={'Finalizadas'}
-        num={2} color={'#11ad8b'}
+        num={closedTask} color={'#11ad8b'}
       />
     </View>
     <ButtonFilter onPress={handleFiter} />
@@ -110,6 +131,11 @@ return (
     }
 
     <StatusBar style="auto" />
+
+    <TouchableOpacity onPress={handleNavigation} style={styles.addButton}>
+      <Ionicons name="add-circle" size={60} color="#FA9216" />
+    </TouchableOpacity>
+
   </View>
 );
 }
@@ -124,4 +150,10 @@ const styles = StyleSheet.create({
     paddingTop: 64,
     gap: 16,
   },
+  addButton:{
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    margin: 5
+  }
 });

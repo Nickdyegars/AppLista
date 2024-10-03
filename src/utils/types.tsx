@@ -20,6 +20,7 @@ export type LabelProps = {
 
 export type RootStackParamList = {
   Home: undefined;
+  NewTask: undefined
   Details: TaskProps;
 }
 
@@ -30,3 +31,10 @@ export type taskContent = {
   date: Date
   status: boolean
 }
+
+
+
+import { StackNavigationProp} from '@react-navigation/stack';
+
+export type NewTaskScreenNavigationProp = StackNavigationProp<RootStackParamList, 'NewTask'>;
+export type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;

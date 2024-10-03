@@ -3,12 +3,15 @@ import * as C from './style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { taskContent } from '../../../utils/types';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { HomeScreenNavigationProp } from '../../../utils/types';
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 export const Content = () => {
 
 
     const [valid, setValid] = useState(false);
+    const [showInfo, setShowInfo] = useState(false);
 
     const [titleTask, setTitleTask] = useState<string>("");
     const [descricao, setDescricao] = useState<string>("");
@@ -16,6 +19,8 @@ export const Content = () => {
     const [date, setDate] = useState<any>(new Date());
     const [show, setShow] = useState(false);
     const [showDate, setShowDate] = useState(false);
+
+    const navigation = useNavigation<HomeScreenNavigationProp>();
 
     const formatDate = (date) => {
         const day = String(date.getDate()).padStart(2, '0');
@@ -56,6 +61,13 @@ export const Content = () => {
 
     }
 
+
+    const handleNavigation = () => {
+
+        navigation.navigate('Home')
+
+    }
+
     const storeData = async () => {
 
 
@@ -81,7 +93,7 @@ export const Content = () => {
                     title: titleTask,
                     descricao: descricao,
                     date: date,
-                    status:false
+                    status: false
                 };
 
 
@@ -89,6 +101,8 @@ export const Content = () => {
                 allTasks.push(value);
                 await AsyncStorage.setItem('task', JSON.stringify(allTasks));
                 console.log("success")
+
+                handleNavigation();
 
             } catch (e) {
                 console.log("erro")
@@ -98,7 +112,10 @@ export const Content = () => {
                 setTitleTask("")
                 setDescricao("")
                 setShowDate(false)
+                setShowInfo(false)
             }
+        } else {
+            setShowInfo(true)
         }
     };
 
@@ -107,7 +124,7 @@ export const Content = () => {
         <C.Container>
 
             <C.InputBox>
-                <C.TextInp>Titulo da Tarefa:</C.TextInp>
+                <C.TextInp >Titulo da Tarefa:</C.TextInp>
                 <C.Input
                     height={56}
                     onChangeText={t => setTitleTask(t)}
@@ -146,7 +163,12 @@ export const Content = () => {
             </View>
             {
                 valid &&
-                <Text style={[{ color: "#fff" }]}>NÃO FOI POSSIVEL ENVIAR, TENTE NOVAMENTE</Text>
+                <Text style={[{ color: "#fff" }, {fontWeight: 'bold'}]}>NÃO FOI POSSIVEL ENVIAR, TENTE NOVAMENTE</Text>
+            }
+
+            {
+                showInfo &&
+                <Text style={[{ color: "#F00" }, {fontSize: 18}, {fontWeight: 'bold'}]}>PREENCHA TODOS OS CAMPOS</Text>
             }
 
 
