@@ -49,7 +49,7 @@ export const InputDate = styled.TouchableOpacity`
 `
 
 export const ButtonTask = styled.TouchableOpacity`
-  margin-top: 20px;
+  margin-top: 45px;
   justify-content:center;
   align-items: center;
   height: 60px;

@@ -3,12 +3,15 @@ import * as C from './style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { taskContent } from '../../../utils/types';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { HomeScreenNavigationProp } from '../../../utils/types';
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 export const Content = () => {
 
 
     const [valid, setValid] = useState(false);
+    const [showInfo, setShowInfo] = useState(false);
 
     const [titleTask, setTitleTask] = useState<string>("");
     const [descricao, setDescricao] = useState<string>("");
@@ -17,11 +20,25 @@ export const Content = () => {
     const [show, setShow] = useState(false);
     const [showDate, setShowDate] = useState(false);
 
+    const navigation = useNavigation<HomeScreenNavigationProp>();
+
     const formatDate = (date) => {
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Lembre-se que os meses começam em 0
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
+    };
+
+    const generateRandomId = (length = 5) => {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&';
+        let result = '';
+
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            result += characters[randomIndex];
+        }
+
+        return result;
     };
 
     const onChange = (event, selectedDate) => {
@@ -36,11 +53,18 @@ export const Content = () => {
             const taskData = await AsyncStorage.getItem("task");
 
             const taskItemsData = taskData ? JSON.parse(taskData) : [];
-            
+
             return taskItemsData;
         } catch {
             console.log("Erro ao recuperar dados")
         }
+
+    }
+
+
+    const handleNavigation = () => {
+
+        navigation.navigate('Home')
 
     }
 
@@ -49,17 +73,36 @@ export const Content = () => {
 
         if (titleTask !== "" && descricao !== "" && showDate) {
 
-            const value: taskContent = {
-                title: titleTask,
-                descricao: descricao,
-                date: date
-            };
-
             try {
                 const allTasks = await getData();
+
+                let id = generateRandomId();
+                let verifyId;
+
+                do {
+                    verifyId = false;
+                    for (let i in allTasks) {
+                        if (allTasks[i].id == id) {
+                            verifyId = true;
+                        }
+                    }
+                } while (verifyId)
+
+                const value: taskContent = {
+                    id: id,
+                    title: titleTask,
+                    descricao: descricao,
+                    date: date,
+                    status: false
+                };
+
+
+
                 allTasks.push(value);
                 await AsyncStorage.setItem('task', JSON.stringify(allTasks));
                 console.log("success")
+
+                handleNavigation();
 
             } catch (e) {
                 console.log("erro")
@@ -69,17 +112,19 @@ export const Content = () => {
                 setTitleTask("")
                 setDescricao("")
                 setShowDate(false)
+                setShowInfo(false)
             }
+        } else {
+            setShowInfo(true)
         }
     };
-
 
 
     return (
         <C.Container>
 
             <C.InputBox>
-                <C.TextInp>Titulo da Tarefa:</C.TextInp>
+                <C.TextInp >Titulo da Tarefa:</C.TextInp>
                 <C.Input
                     height={56}
                     onChangeText={t => setTitleTask(t)}
@@ -118,7 +163,12 @@ export const Content = () => {
             </View>
             {
                 valid &&
-                <Text style={[{ color: "#fff" }]}>NÃO FOI POSSIVEL ENVIAR, TENTE NOVAMENTE</Text>
+                <Text style={[{ color: "#fff" }, {fontWeight: 'bold'}]}>NÃO FOI POSSIVEL ENVIAR, TENTE NOVAMENTE</Text>
+            }
+
+            {
+                showInfo &&
+                <Text style={[{ color: "#F00" }, {fontSize: 18}, {fontWeight: 'bold'}]}>PREENCHA TODOS OS CAMPOS</Text>
             }
 
 

@@ -9,7 +9,7 @@ export const Container = styled.SafeAreaView`
     align-items: center;
     margin-top: 20px;
 `
-export const BackButton = styled.View`
+export const BackButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   heigth: 45px;
