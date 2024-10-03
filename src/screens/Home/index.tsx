@@ -4,7 +4,7 @@ import { CardNumber } from '../../components/CardNumber';
 import { InputAddTask } from '../../components/EditText';
 import { ButtonFilter } from '../../components/ButtonFilter';
 import { Feather } from "@expo/vector-icons";
-import React, {useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Task } from '../../components/Task';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { taskContent } from '../../utils/types';
@@ -31,11 +31,11 @@ export function Home() {
         let closed: number = 0;
         let open: number = 0;
 
-        for( let i in taskItemsData){
-          if(taskItemsData[i].status){
-            open += 1;
-          }else{
+        for (let i in taskItemsData) {
+          if (taskItemsData[i].status === true) {
             closed += 1;
+          } else {
+            open += 1;
           }
 
           setClosedTask(closed);
@@ -49,96 +49,109 @@ export function Home() {
       }
     }
 
-    const fetchTaskData = async () =>{
+    const fetchTaskData = async () => {
       setTaskData(await getData());
     }
 
     fetchTaskData();
 
-    
-  },[taskData]);
 
- 
+  }, [taskData]);
+
+
   const handleDeleteTask = async (id: string) => {
-   
-      const taskData = await AsyncStorage.getItem("task");
-      const taskItemsData = taskData ? JSON.parse(taskData) : [];
-      const taskWithOutDeleted = taskItemsData.filter(task => task.id !== id);
 
-      await AsyncStorage.setItem('task', JSON.stringify(taskWithOutDeleted));
+    const taskData = await AsyncStorage.getItem("task");
+    const taskItemsData = taskData ? JSON.parse(taskData) : [];
+    const taskWithOutDeleted = taskItemsData.filter(task => task.id !== id);
 
-      setTaskData(taskWithOutDeleted);
+    await AsyncStorage.setItem('task', JSON.stringify(taskWithOutDeleted));
+
+    let open = 0;
+    let closed = 0;
+
+    for (let i in taskWithOutDeleted) {
+      if (taskItemsData[i].status) {
+        open += 1;
+      } else {
+        closed += 1;
+      }
+    }
+    setClosedTask(closed);
+    setOpenTask(open)
+
+    setTaskData(taskWithOutDeleted);
   }
 
-  const handleChageStatus = async (id: string, newStatus: boolean) =>{
+  const handleChageStatus = async (id: string, newStatus: boolean) => {
 
     const taskData = await AsyncStorage.getItem("task");
     const taskItemsData = taskData ? JSON.parse(taskData) : [];
     const tasks = taskItemsData.map(task =>
-      task.id === id ? {...task, status: newStatus} : task
+      task.id === id ? { ...task, status: newStatus } : task
     )
 
-    
+
     await AsyncStorage.setItem('task', JSON.stringify(tasks));
 
     setTaskData(tasks);
 
   }
 
-  const handleNavigation = () =>{
+  const handleNavigation = () => {
 
     navigation.navigate('NewTask')
 
   }
 
-  const handleAddTask = () =>{
+  const handleAddTask = () => {
 
   }
 
-  const setTaskText = () =>{
-    
-  }
-  const handleFiter = () =>{
-    
-  }
-return (
-  <View style={styles.container}>
-    <InputAddTask onPress={handleAddTask} onChangeText={setTaskText} value={''} />
-    <Feather style={{ alignSelf: 'flex-end' }} name="plus-square" size={24} color="white" />
-    <View style={{ flexDirection: 'row', gap: 16 }}>
-      <CardNumber
-        title={'Cadastradas'}
-        num={amountTask} color={'#1E1E1E'} />
-      <CardNumber
-        title={'Em aberto'}
-        num={openTask} color={'#FA9216'}
-      />
-      <CardNumber
-        title={'Finalizadas'}
-        num={closedTask} color={'#11ad8b'}
-      />
-    </View>
-    <ButtonFilter onPress={handleFiter} />
+  const setTaskText = () => {
 
-    {taskData &&
-      taskData.map((item, key) =>(
-        <Task
-          key={key}
-          taskData={item}
-          deleteTask={handleDeleteTask}
-          changeStatus={handleChageStatus}
+  }
+  const handleFiter = () => {
+
+  }
+  return (
+    <View style={styles.container}>
+      <InputAddTask onPress={handleAddTask} onChangeText={setTaskText} value={''} />
+      <Feather style={{ alignSelf: 'flex-end' }} name="plus-square" size={24} color="white" />
+      <View style={{ flexDirection: 'row', gap: 16 }}>
+        <CardNumber
+          title={'Cadastradas'}
+          num={amountTask} color={'#1E1E1E'} />
+        <CardNumber
+          title={'Em aberto'}
+          num={openTask} color={'#FA9216'}
         />
-      ))
-    }
+        <CardNumber
+          title={'Finalizadas'}
+          num={closedTask} color={'#11ad8b'}
+        />
+      </View>
+      <ButtonFilter onPress={handleFiter} />
 
-    <StatusBar style="auto" />
+      {taskData &&
+        taskData.map((item, key) => (
+          <Task
+            key={key}
+            taskData={item}
+            deleteTask={handleDeleteTask}
+            changeStatus={handleChageStatus}
+          />
+        ))
+      }
 
-    <TouchableOpacity onPress={handleNavigation} style={styles.addButton}>
-      <Ionicons name="add-circle" size={60} color="#FA9216" />
-    </TouchableOpacity>
+      <StatusBar style="auto" />
 
-  </View>
-);
+      <TouchableOpacity onPress={handleNavigation} style={styles.addButton}>
+        <Ionicons name="add-circle" size={60} color="#FA9216" />
+      </TouchableOpacity>
+
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -151,7 +164,7 @@ const styles = StyleSheet.create({
     paddingTop: 64,
     gap: 16,
   },
-  addButton:{
+  addButton: {
     position: "absolute",
     bottom: 0,
     right: 0,

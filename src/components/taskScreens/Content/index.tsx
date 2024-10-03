@@ -141,6 +141,8 @@ export const Content = () => {
                     onChangeText={t => setDescricao(t)}
                     textAlignVertical="top"
                     value={descricao}
+                    multiline
+                    numberOfLines={4}
                 />
             </C.InputBox>
 
@@ -163,12 +165,12 @@ export const Content = () => {
             </View>
             {
                 valid &&
-                <Text style={[{ color: "#fff" }, {fontWeight: 'bold'}]}>NÃO FOI POSSIVEL ENVIAR, TENTE NOVAMENTE</Text>
+                <Text style={[{ color: "#fff" }, { fontWeight: 'bold' }]}>NÃO FOI POSSIVEL ENVIAR, TENTE NOVAMENTE</Text>
             }
 
             {
                 showInfo &&
-                <Text style={[{ color: "#F00" }, {fontSize: 18}, {fontWeight: 'bold'}]}>PREENCHA TODOS OS CAMPOS</Text>
+                <Text style={[{ color: "#F00" }, { fontSize: 18 }, { fontWeight: 'bold' }]}>PREENCHA TODOS OS CAMPOS</Text>
             }
 
 
