@@ -24,6 +24,7 @@ export type RootStackParamList = {
 }
 
 export type taskContent = {
+  id: string;
   title: String,
   descricao: String,
   date: Date

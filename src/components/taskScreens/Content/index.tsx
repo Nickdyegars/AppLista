@@ -24,6 +24,18 @@ export const Content = () => {
         return `${day}/${month}/${year}`;
     };
 
+    const generateRandomId = (length = 5) => {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&';
+        let result = '';
+
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            result += characters[randomIndex];
+        }
+
+        return result;
+    };
+
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
         setShow(false);
@@ -36,7 +48,7 @@ export const Content = () => {
             const taskData = await AsyncStorage.getItem("task");
 
             const taskItemsData = taskData ? JSON.parse(taskData) : [];
-            
+
             return taskItemsData;
         } catch {
             console.log("Erro ao recuperar dados")
@@ -49,14 +61,30 @@ export const Content = () => {
 
         if (titleTask !== "" && descricao !== "" && showDate) {
 
-            const value: taskContent = {
-                title: titleTask,
-                descricao: descricao,
-                date: date
-            };
-
             try {
                 const allTasks = await getData();
+
+                let id = generateRandomId();
+                let verifyId;
+
+                do {
+                    verifyId = false;
+                    for (let i in allTasks) {
+                        if (allTasks[i].id == id) {
+                            verifyId = true;
+                        }
+                    }
+                } while (verifyId)
+
+                const value: taskContent = {
+                    id: id,
+                    title: titleTask,
+                    descricao: descricao,
+                    date: date
+                };
+
+
+
                 allTasks.push(value);
                 await AsyncStorage.setItem('task', JSON.stringify(allTasks));
                 console.log("success")
@@ -72,7 +100,6 @@ export const Content = () => {
             }
         }
     };
-
 
 
     return (
