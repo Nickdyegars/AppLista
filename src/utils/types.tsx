@@ -22,3 +22,9 @@ export type RootStackParamList = {
   Home: undefined;
   Details: TaskProps;
 }
+
+export type taskContent = {
+  title: String,
+  descricao: String,
+  date: Date
+}

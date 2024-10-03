@@ -25,5 +25,5 @@ export const BackButton = styled.View`
 
 export const Title = styled.Text`
     color: #fff;
-    font-size: 24;
+    font-size: 24px;
 `
