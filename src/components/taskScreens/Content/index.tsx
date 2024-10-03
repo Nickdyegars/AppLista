@@ -80,7 +80,8 @@ export const Content = () => {
                     id: id,
                     title: titleTask,
                     descricao: descricao,
-                    date: date
+                    date: date,
+                    status:false
                 };
 
 

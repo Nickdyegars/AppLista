@@ -16,8 +16,8 @@ export default function App() {
   return (
     <TaskProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName='NewTask' screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="NewTask" component={NewTask} />
+        <Stack.Navigator initialRouteName='Home' screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Home" component={Home} />
           {/* <Stack.Screen name="Details" component={Details} /> */}
         </Stack.Navigator>
       </NavigationContainer>
