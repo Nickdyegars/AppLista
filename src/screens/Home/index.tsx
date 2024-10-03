@@ -121,8 +121,9 @@ return (
     <ButtonFilter onPress={handleFiter} />
 
     {taskData &&
-      taskData.map((item) =>(
+      taskData.map((item, key) =>(
         <Task
+          key={key}
           taskData={item}
           deleteTask={handleDeleteTask}
           changeStatus={handleChageStatus}
