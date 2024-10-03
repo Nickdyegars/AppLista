@@ -8,7 +8,7 @@ import { useState } from 'react';
 export const Content = () => {
 
 
-    const [teste, setTeste] = useState(false);
+    const [valid, setValid] = useState(false);
 
     const [titleTask, setTitleTask] = useState<string>("");
     const [descricao, setDescricao] = useState<string>("");
@@ -30,10 +30,23 @@ export const Content = () => {
         setShowDate(true);
         setDate(currentDate);
     };
-   
+
+    const getData = async (): Promise<taskContent[]> => {
+        try {
+            const taskData = await AsyncStorage.getItem("task");
+
+            const taskItemsData = taskData ? JSON.parse(taskData) : [];
+            
+            return taskItemsData;
+        } catch {
+            console.log("Erro ao recuperar dados")
+        }
+
+    }
+
     const storeData = async () => {
 
-        
+
         if (titleTask !== "" && descricao !== "" && showDate) {
 
             const value: taskContent = {
@@ -41,14 +54,18 @@ export const Content = () => {
                 descricao: descricao,
                 date: date
             };
+
             try {
-                await AsyncStorage.setItem('task', JSON.stringify(value));
+                const allTasks = await getData();
+                allTasks.push(value);
+                await AsyncStorage.setItem('task', JSON.stringify(allTasks));
+                console.log("success")
 
             } catch (e) {
-                // saving error
-                
-            setTeste(true);
-            }finally{
+                console.log("erro")
+
+                setValid(true);
+            } finally {
                 setTitleTask("")
                 setDescricao("")
                 setShowDate(false)
@@ -56,9 +73,11 @@ export const Content = () => {
         }
     };
 
+
+
     return (
         <C.Container>
-            
+
             <C.InputBox>
                 <C.TextInp>Titulo da Tarefa:</C.TextInp>
                 <C.Input
@@ -68,19 +87,19 @@ export const Content = () => {
                 />
             </C.InputBox>
 
-            
+
 
             <C.InputBox>
                 <C.TextInp>Descrição:</C.TextInp>
                 <C.Input
                     height={170}
                     onChangeText={t => setDescricao(t)}
-                    textAlignVertical="top"                    
+                    textAlignVertical="top"
                     value={descricao}
                 />
             </C.InputBox>
 
-           
+
 
             <View style={[{ "marginBottom": 15 }]}>
 
@@ -98,10 +117,10 @@ export const Content = () => {
                 </C.InputDate >
             </View>
             {
-                teste &&
-                <Text style={[{color: "#fff"}]}>NÃO FOI POSSIVEL ENVIAR, TENTE NOVAMENTE</Text>
+                valid &&
+                <Text style={[{ color: "#fff" }]}>NÃO FOI POSSIVEL ENVIAR, TENTE NOVAMENTE</Text>
             }
-            
+
 
             <C.ButtonTask onPress={() => storeData()}>
                 <Text style={[{ color: "#fff" }, { fontSize: 19 }]}>Criar Tarefa</Text>
@@ -109,7 +128,7 @@ export const Content = () => {
             </C.ButtonTask>
 
 
-            
+
 
 
 
