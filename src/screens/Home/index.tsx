@@ -50,9 +50,9 @@ export function Home() {
     
   },[taskData]);
 
-
+ 
   const handleDeleteTask = async (id: string) => {
-    try {
+   
       const taskData = await AsyncStorage.getItem("task");
       const taskItemsData = taskData ? JSON.parse(taskData) : [];
       const taskWithOutDeleted = taskItemsData.filter(task => task.id !== id);
@@ -60,11 +60,24 @@ export function Home() {
       await AsyncStorage.setItem('task', JSON.stringify(taskWithOutDeleted));
 
       setTaskData(taskWithOutDeleted);
-    } catch {
-      console.log("Erro ao recuperar dados")
-    }
+  
 
     
+  }
+
+  const handleChageStatus = async (id: string, newStatus: boolean) =>{
+
+    const taskData = await AsyncStorage.getItem("task");
+    const taskItemsData = taskData ? JSON.parse(taskData) : [];
+    const tasks = taskItemsData.map(task =>
+      task.id === id ? {...task, status: newStatus} : task
+    )
+
+    
+    await AsyncStorage.setItem('task', JSON.stringify(tasks));
+
+    setTaskData(tasks);
+
   }
 
 return (
@@ -91,6 +104,7 @@ return (
         <Task
           taskData={item}
           deleteTask={handleDeleteTask}
+          changeStatus={handleChageStatus}
         />
       ))
     }

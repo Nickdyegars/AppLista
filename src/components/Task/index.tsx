@@ -9,6 +9,7 @@ import * as C from "./style";
 interface handleTask{
   taskData: taskContent
   deleteTask: (id: string) => void
+  changeStatus: (id: string, newStatus: boolean) => void
 }
 
 export function Task(Props: handleTask) {
@@ -35,9 +36,16 @@ export function Task(Props: handleTask) {
   const deleteTask = () => {
     Props.deleteTask(Props.taskData.id);
   }
+
+  const changeStatus = () =>{
+
+    const newStatus = Props.taskData.status ? false : true;
+
+    Props.changeStatus(Props.taskData.id, newStatus);
+  }
   return (
     <C.Container>
-      <C.ContainerCheck width={70} color={Props.taskData.status ? "#21D233" : "#FA9216"}>
+      <C.ContainerCheck onPress={changeStatus} width={70} color={Props.taskData.status ? "#21D233" : "#FA9216"}>
         {
           Props.taskData.status &&
           <MaterialCommunityIcons name="checkbox-outline" size={24} color="black" /> ||
