@@ -21,6 +21,9 @@ export type LabelProps = {
 export type RootStackParamList = {
   Home: undefined;
   NewTask: undefined
+  EditTask: {
+    id:string
+  }
   Details: TaskProps;
 }
 
@@ -33,8 +36,10 @@ export type taskContent = {
 }
 
 
-
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp} from '@react-navigation/stack';
 
 export type NewTaskScreenNavigationProp = StackNavigationProp<RootStackParamList, 'NewTask'>;
+export type EditTaskScreenNavigationProp = StackNavigationProp<RootStackParamList, 'EditTask'>;
 export type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+export type EditTaskScreenRouteProp = RouteProp<RootStackParamList, 'EditTask'>;
