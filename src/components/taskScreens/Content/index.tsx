@@ -6,6 +6,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { HomeScreenNavigationProp } from '../../../utils/types';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export const Content = () => {
 
@@ -121,6 +122,7 @@ export const Content = () => {
 
 
     return (
+        <KeyboardAwareScrollView>
         <C.Container>
 
             <C.InputBox>
@@ -178,13 +180,7 @@ export const Content = () => {
                 <Text style={[{ color: "#fff" }, { fontSize: 19 }]}>Criar Tarefa</Text>
 
             </C.ButtonTask>
-
-
-
-
-
-
-
         </C.Container>
+        </KeyboardAwareScrollView>
     )
 }
