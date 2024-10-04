@@ -3,7 +3,8 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useEffect, useState } from "react";
 import * as C from './style';
-import { taskContent } from "../../utils/types";
+import { EditTaskScreenNavigationProp, taskContent } from "../../utils/types";
+import { useNavigation } from "@react-navigation/native";
 
 
 interface types {
@@ -16,6 +17,8 @@ export const PopupEdit = (Props: types) => {
     const [date, setDate] = useState<string | null>(null);
     const [color, setColor] = useState<string>("");
 
+    const navigation = useNavigation<EditTaskScreenNavigationProp>();
+
     const handleCloseModal = () => {
         Props.closeModal();
     }
@@ -26,6 +29,11 @@ export const PopupEdit = (Props: types) => {
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     };
+
+    const handleEditTask = () =>{
+        handleCloseModal()
+        navigation.navigate('EditTask', {id: Props.taskData.id})
+    }
 
     useEffect(() => {
         if (Props.taskData.date) {
@@ -85,7 +93,7 @@ export const PopupEdit = (Props: types) => {
                 <C.StatusBar color={color}><Text> </Text></C.StatusBar>
             </C.StatusContainer>
 
-            <C.EditTask >
+            <C.EditTask onPress={handleEditTask}>
                 <MaterialCommunityIcons name="square-edit-outline" size={45} color="#FA9216" />
             </C.EditTask>
 
