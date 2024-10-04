@@ -10,6 +10,7 @@ interface handleTask{
   taskData: taskContent
   deleteTask: (id: string) => void
   changeStatus: (id: string, newStatus: boolean) => void
+  showModalTask: (id: string) => void
 }
 
 export function Task(Props: handleTask) {
@@ -38,10 +39,12 @@ export function Task(Props: handleTask) {
   }
 
   const changeStatus = () =>{
-
     const newStatus = Props.taskData.status ? false : true;
-
     Props.changeStatus(Props.taskData.id, newStatus);
+  }
+
+  const showModal = () => {
+    Props.showModalTask(Props.taskData.id);
   }
   return (
     <C.Container>
@@ -53,7 +56,7 @@ export function Task(Props: handleTask) {
         }
 
       </C.ContainerCheck>
-      <C.CenterContainer>
+      <C.CenterContainer  onPress={showModal}>
         <C.Title >{Props.taskData.title}</C.Title>
         <C.Date >{date}</C.Date>
       </C.CenterContainer>

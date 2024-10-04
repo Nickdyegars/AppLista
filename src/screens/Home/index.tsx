@@ -1,9 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Dimensions } from 'react-native';
 import { CardNumber } from '../../components/CardNumber';
 import { InputAddTask } from '../../components/EditText';
-import { ButtonFilter } from '../../components/ButtonFilter';
-import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from 'react';
 import { Task } from '../../components/Task';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,6 +9,7 @@ import { taskContent } from '../../utils/types';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { NewTaskScreenNavigationProp } from '../../utils/types';
+import { PopupEdit } from '../../components/PopupEdit';
 
 export function Home() {
 
@@ -18,7 +17,12 @@ export function Home() {
   const [amountTask, setAmountTask] = useState<number>(0);
   const [openTask, setOpenTask] = useState<number>(0);
   const [closedTask, setClosedTask] = useState<number>(0);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [taskEdit, setTaskEdit] = useState<taskContent>(null);
   const navigation = useNavigation<NewTaskScreenNavigationProp>();
+  
+
+  const { height, width } = Dimensions.get('window');
 
   useEffect(() => {
     const getData = async (): Promise<taskContent[]> => {
@@ -111,14 +115,66 @@ export function Home() {
   const setTaskText = () => {
 
   }
-  const handleFiter = () => {
+
+  const handleCloseModal = () =>{
+    setShowModal(false);
+    setTaskEdit(null);
+  }
+
+  const handleShowModal = async (id: string) => {
+    const taskData = await AsyncStorage.getItem("task");
+    const taskItemsData = taskData ? JSON.parse(taskData) : [];
+    
+    for(let i in taskItemsData){
+      if(taskItemsData[i].id === id){
+        setTaskEdit(taskItemsData[i]);
+      }
+    }
+
+    setShowModal(true);
 
   }
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#252525',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      padding: 16,
+      paddingTop: 64,
+      gap: 16,
+    },
+    addButton: {
+      position: "absolute",
+      bottom: 0,
+      right: 0,
+      margin: 5
+    },
+    containerPopUp: {
+      position: "absolute",
+      height: height,
+      width: width,
+      backgroundColor: "rgba(0,0,0,0.5)",
+      zIndex: 2,
+      alignItems: "center",
+      justifyContent: "center",
+
+    }
+  });
+
   return (
     <View style={styles.container}>
+
+      { showModal &&
+        <View style={styles.containerPopUp}>
+          <PopupEdit taskData={taskEdit} closeModal={handleCloseModal}/>
+        </View>
+      }
+
+
       <InputAddTask onPress={handleAddTask} onChangeText={setTaskText} value={''} />
-      <Feather style={{ alignSelf: 'flex-end' }} name="plus-square" size={24} color="white" />
-      <View style={{ flexDirection: 'row', gap: 16 }}>
+      <View style={{ flexDirection: 'row', gap: 16, marginTop: 18 }}>
         <CardNumber
           title={'Cadastradas'}
           num={amountTask} color={'#1E1E1E'} />
@@ -131,7 +187,6 @@ export function Home() {
           num={closedTask} color={'#11ad8b'}
         />
       </View>
-      <ButtonFilter onPress={handleFiter} />
 
       {taskData &&
         taskData.map((item, key) => (
@@ -140,6 +195,7 @@ export function Home() {
             taskData={item}
             deleteTask={handleDeleteTask}
             changeStatus={handleChageStatus}
+            showModalTask={handleShowModal}
           />
         ))
       }
@@ -150,24 +206,8 @@ export function Home() {
         <Ionicons name="add-circle" size={60} color="#FA9216" />
       </TouchableOpacity>
 
+
+
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#252525',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: 16,
-    paddingTop: 64,
-    gap: 16,
-  },
-  addButton: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    margin: 5
-  }
-});

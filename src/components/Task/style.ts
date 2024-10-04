@@ -11,7 +11,7 @@ export const Container = styled.View`
   overflow: hidden;
   width: 95%;
 `;
-export const CenterContainer = styled.View`
+export const CenterContainer = styled.TouchableOpacity`
   background-color: #fff;
   justify-content: center;
   align-items: center;
