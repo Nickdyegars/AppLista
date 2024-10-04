@@ -14,6 +14,7 @@ interface types {
 export const PopupEdit = (Props: types) => {
 
     const [date, setDate] = useState<string | null>(null);
+    const [color, setColor] = useState<string>("");
 
     const handleCloseModal = () => {
         Props.closeModal();
@@ -34,6 +35,12 @@ export const PopupEdit = (Props: types) => {
             } else {
                 console.error('Data inválida');
             }
+        }
+
+        if(Props.taskData.status){
+            setColor("#21D233")
+        }else{
+            setColor("#FA9216")
         }
     }, [Props.taskData.date]);
 
@@ -72,6 +79,11 @@ export const PopupEdit = (Props: types) => {
                     editable={false}
                 />
             </C.InputBox>
+
+            <C.StatusContainer>
+                <C.TextInp>Status:</C.TextInp>
+                <C.StatusBar color={color}><Text> </Text></C.StatusBar>
+            </C.StatusContainer>
 
             <C.EditTask >
                 <MaterialCommunityIcons name="square-edit-outline" size={45} color="#FA9216" />

@@ -63,6 +63,18 @@ export const EditTask = styled.TouchableOpacity`
       bottom: 0;
       right: 0;
       margin: 15px;
-
-
 `
+export const StatusContainer = styled.View`
+  
+
+` 
+type PropsStatus = {
+  color: string;
+}
+export const StatusBar = styled.View<PropsStatus>`
+  background-color: ${PropsStatus => PropsStatus.color};
+  width: 100px;
+  margin-left: 10px;
+  height: 25px;
+  border-radius: 20px;
+` 
