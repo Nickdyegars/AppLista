@@ -3,12 +3,11 @@ import { InputContainer, Input, IconSearch } from "./styles";
 import React from "react";
 
 type Props = {
-  onPress: () => void;
   onChangeText: (text: string) => void;
   value: string;
 }
 
-export function InputAddTask({ onPress, onChangeText, value }: Props) {
+export function InputAddTask({ onChangeText, value }: Props) {
   return (
     <InputContainer>
       <IconSearch>
