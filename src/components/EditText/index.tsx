@@ -14,7 +14,7 @@ export function InputAddTask({ onChangeText, value }: Props) {
         <Feather name="search" size={24} color="white" />
       </IconSearch>
       <Input
-        placeholder="Adicionar tarefa"
+        placeholder="Pesquisar tarefa"
         placeholderTextColor="white"
         keyboardType="default"
         value={value}

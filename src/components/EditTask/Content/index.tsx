@@ -6,6 +6,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { HomeScreenNavigationProp } from '../../../utils/types';
 import { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export const Content = () => {
 
@@ -125,10 +126,10 @@ export const Content = () => {
 
 
     return (
+        <KeyboardAwareScrollView>
         <C.Container>
-
             <C.InputBox>
-                <C.TextInp >Titulo da Tarefa:</C.TextInp>
+                <C.TextInp >Titulo da Tarefa</C.TextInp>
                 <C.Input
                     height={56}
                     onChangeText={t => setTitleTask(t)}
@@ -139,7 +140,7 @@ export const Content = () => {
 
 
             <C.InputBox>
-                <C.TextInp>Descrição:</C.TextInp>
+                <C.TextInp>Descrição</C.TextInp>
                 <C.Input
                     height={170}
                     onChangeText={t => setDescricao(t)}
@@ -169,12 +170,11 @@ export const Content = () => {
             </View>
             {
                 valid &&
-                <Text style={[{ color: "#fff" }, { fontWeight: 'bold' }]}>NÃO FOI POSSIVEL ENVIAR, TENTE NOVAMENTE</Text>
+               <C.AlertContainer><C.AlertTitle>ATENÇÃO</C.AlertTitle><C.AlertText>NÃO FOI POSSIVEL ENVIAR, TENTE NOVAMENTE</C.AlertText></C.AlertContainer>
             }
 
             {
-                showInfo &&
-                <Text style={[{ color: "#F00" }, { fontSize: 18 }, { fontWeight: 'bold' }]}>PREENCHA TODOS OS CAMPOS</Text>
+                showInfo &&  <C.AlertContainer><C.AlertTitle>ATENÇÃO</C.AlertTitle><C.AlertText>PREENCHA TODOS OS CAMPOS</C.AlertText></C.AlertContainer>
             }
 
 
@@ -182,13 +182,7 @@ export const Content = () => {
                 <Text style={[{ color: "#fff" }, { fontSize: 19 }]}>Editar Tarefa</Text>
 
             </C.ButtonTask>
-
-
-
-
-
-
-
         </C.Container>
+        </KeyboardAwareScrollView>
     )
 }

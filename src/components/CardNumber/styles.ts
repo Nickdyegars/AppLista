@@ -6,13 +6,14 @@ export const Container = styled.View`
   align-items: center;
   background-color: #fff;
   border-radius: 4px;
+  width: 110px;
   overflow: hidden;
   gap: 8px;
 `;
 
 export const CardTitle = styled.Text`
   color: #1e1e1e;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 500;
 `;
 

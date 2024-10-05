@@ -57,3 +57,20 @@ export const ButtonTask = styled.TouchableOpacity`
   border-radius: 40px;
 
 `
+
+export const AlertContainer = styled.View`
+  background-color: #ff9999;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 5px;
+
+`;
+
+export const AlertText = styled.Text`
+  color: #000;
+`;
+
+export const AlertTitle = styled.Text`
+  color: #000;
+  font-weight: bold; 
+`;

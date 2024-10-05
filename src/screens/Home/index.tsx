@@ -14,7 +14,7 @@ import { useCallback } from 'react';
 
 export function Home() {
 
-  const [taskData, setTaskData] = useState<taskContent[]>(null);
+  const [taskData, setTaskData] = useState<taskContent[]>([]);
   const [originalTaskData, setOriginalTaskData] = useState<taskContent[]>(null);  // Tarefas originais
   const [amountTask, setAmountTask] = useState<number>(0);
   const [openTask, setOpenTask] = useState<number>(0);
@@ -30,6 +30,7 @@ export function Home() {
   const getData = async (): Promise<taskContent[]> => {
     try {
       const taskData = await AsyncStorage.getItem("task");
+      
       const taskItemsData = taskData ? JSON.parse(taskData) : [];
 
       return taskItemsData;
@@ -76,6 +77,8 @@ export function Home() {
     // countOpenTasks();
 
     setTaskData(taskWithOutDeleted);
+    //caso deletou itens filtrados
+    setOriginalTaskData(taskWithOutDeleted);
   }
 
   const handleChageStatus = async (id: string, newStatus: boolean) => {
@@ -96,7 +99,8 @@ export function Home() {
 
   const handleSearch = (text: string) => {
     setSearchText(text);
-
+  
+    
     if (text.trim() === "") {
       setTaskData(originalTaskData);
       return;
@@ -109,6 +113,9 @@ export function Home() {
     const remainingTasks = originalTaskData.filter(
       task => !task.title.toLowerCase().includes(text.toLowerCase())
     );
+
+    //console.log(filteredTasks);
+    //console.log(remainingTasks);
 
     setTaskData([...filteredTasks, ...remainingTasks]);
   };
@@ -173,7 +180,7 @@ export function Home() {
         <CardNumber title={'Finalizadas'} num={closedTask} color={'#11ad8b'} />
       </View>
 
-      {taskData &&
+      {  taskData &&
         taskData.map((item, key) => (
           <Task
             key={key}

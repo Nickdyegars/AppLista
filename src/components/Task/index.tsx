@@ -48,7 +48,7 @@ export function Task(Props: handleTask) {
   }
   return (
     <C.Container>
-      <C.ContainerCheck onPress={changeStatus} width={70} color={Props.taskData.status ? "#21D233" : "#FA9216"}>
+      <C.ContainerCheck onPress={changeStatus} width={50} color={Props.taskData.status ? "#21D233" : "#FA9216"}>
         {
           Props.taskData.status &&
           <MaterialCommunityIcons name="checkbox-outline" size={24} color="black" /> ||
