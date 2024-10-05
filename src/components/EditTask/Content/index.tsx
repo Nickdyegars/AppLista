@@ -49,6 +49,13 @@ export const Content = () => {
 
     }
 
+    function capitalizeFirstLetter(sentence) {
+        return sentence
+          .split(' ') // Divide a frase em palavras
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitaliza a primeira letra e mantém o resto em minúsculo
+          .join(' '); // Junta as palavras de volta em uma frase
+      }
+
     const storeData = async () => {
 
 
@@ -56,7 +63,6 @@ export const Content = () => {
 
 
             try {
-                console.log(idTask)
                 const taskData = await AsyncStorage.getItem("task");
                 let taskItemsData = taskData ? JSON.parse(taskData) : [];
 
@@ -66,7 +72,7 @@ export const Content = () => {
                     if(taskItemsData[i].id === idTask){
                         value = {
                             id: idTask,
-                            title: titleTask,
+                            title: capitalizeFirstLetter(titleTask),
                             descricao: descricao,
                             date: date,
                             status:  taskItemsData[i].status

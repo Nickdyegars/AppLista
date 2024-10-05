@@ -70,6 +70,13 @@ export const Content = () => {
 
     }
 
+    function capitalizeFirstLetter(sentence) {
+        return sentence
+          .split(' ') // Divide a frase em palavras
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitaliza a primeira letra e mantém o resto em minúsculo
+          .join(' '); // Junta as palavras de volta em uma frase
+      }
+
     const storeData = async () => {
 
 
@@ -92,7 +99,7 @@ export const Content = () => {
 
                 const value: taskContent = {
                     id: id,
-                    title: titleTask,
+                    title: capitalizeFirstLetter(titleTask),
                     descricao: descricao,
                     date: date,
                     status: false

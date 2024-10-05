@@ -39,25 +39,28 @@ export function Home() {
     }
   };
 
-  const countOpenTasks = () => {
-    let totalTasks = taskData.length;
-    let totalTasksOpen = taskData.filter((task) => task.status === false).length;
-    let totalTasksCompleted = taskData.filter((task) => task.status === true).length;
-
-    setClosedTask(totalTasksCompleted);
-    setOpenTask(totalTasksOpen);
-    setAmountTask(totalTasks);
-  }
 
   useEffect(() => {
-    countOpenTasks();
-  })
+    const countTasks = () => {
+      let totalTasks = taskData.length;
+      let totalTasksOpen = taskData.filter((task) => task.status === false).length;
+      let totalTasksCompleted = taskData.filter((task) => task.status === true).length;
+  
+      setClosedTask(totalTasksCompleted);
+      setOpenTask(totalTasksOpen);
+      setAmountTask(totalTasks);
+    }
+    
+    countTasks();  
+
+  },[taskData]);
 
   // UseFocusEffect para garantir que os dados sejam buscados ao focar a tela
   useFocusEffect(
     useCallback(() => {
       const fetchTaskData = async () => {
-        const tasks = await getData();
+        let tasks = await getData();
+        tasks = sortedTasks(tasks);
         setAmountTask(tasks.length);
         setTaskData(tasks);
         setOriginalTaskData(tasks);
@@ -84,13 +87,15 @@ export function Home() {
   const handleChageStatus = async (id: string, newStatus: boolean) => {
     const taskData = await AsyncStorage.getItem("task");
     const taskItemsData = taskData ? JSON.parse(taskData) : [];
-    const tasks = taskItemsData.map(task =>
+    let tasks = taskItemsData.map(task =>
       task.id === id ? { ...task, status: newStatus } : task
     )
 
+    tasks = sortedTasks(tasks);
     await AsyncStorage.setItem('task', JSON.stringify(tasks));
 
     setTaskData(tasks);
+    setOriginalTaskData(tasks);
   }
 
   const handleNavigation = () => {
@@ -110,14 +115,8 @@ export function Home() {
       task.title.toLowerCase().includes(text.toLowerCase())
     );
 
-    const remainingTasks = originalTaskData.filter(
-      task => !task.title.toLowerCase().includes(text.toLowerCase())
-    );
 
-    //console.log(filteredTasks);
-    //console.log(remainingTasks);
-
-    setTaskData([...filteredTasks, ...remainingTasks]);
+    setTaskData(filteredTasks); 
   };
 
   const handleCloseModal = () => {
@@ -137,6 +136,14 @@ export function Home() {
 
     setShowModal(true);
   }
+
+  const sortedTasks = (tasks) =>{
+    tasks.sort((a, b) => {
+      return a.status === b.status ? 0 : a.status ? 1 : -1;
+    });
+
+    return tasks;
+  } 
 
   const styles = StyleSheet.create({
     container: {
