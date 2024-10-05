@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { taskContent } from '../../../utils/types';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { HomeScreenNavigationProp } from '../../../utils/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -22,6 +22,7 @@ export const Content = () => {
     const [showDate, setShowDate] = useState(false);
 
     const navigation = useNavigation<HomeScreenNavigationProp>();
+
 
     const formatDate = (date) => {
         const day = String(date.getDate()).padStart(2, '0');
@@ -126,7 +127,7 @@ export const Content = () => {
         <C.Container>
 
             <C.InputBox>
-                <C.TextInp >Titulo da Tarefa:</C.TextInp>
+                <C.TextInp >Titulo da Tarefa</C.TextInp>
                 <C.Input
                     height={56}
                     onChangeText={t => setTitleTask(t)}
@@ -137,7 +138,7 @@ export const Content = () => {
 
 
             <C.InputBox>
-                <C.TextInp>Descrição:</C.TextInp>
+                <C.TextInp>Descrição</C.TextInp>
                 <C.Input
                     height={170}
                     onChangeText={t => setDescricao(t)}
@@ -166,13 +167,13 @@ export const Content = () => {
                 </C.InputDate >
             </View>
             {
-                valid &&
-                <Text style={[{ color: "#fff" }, { fontWeight: 'bold' }]}>NÃO FOI POSSIVEL ENVIAR, TENTE NOVAMENTE</Text>
-            }
+                valid && <C.AlertContainer><C.AlertText><C.AlertTitle>ATENÇÃO:</C.AlertTitle>NÃO FOI POSSIVEL ENVIAR, TENTE NOVAMENTE</C.AlertText></C.AlertContainer>
+                }
 
             {
                 showInfo &&
-                <Text style={[{ color: "#F00" }, { fontSize: 18 }, { fontWeight: 'bold' }]}>PREENCHA TODOS OS CAMPOS</Text>
+                <C.AlertContainer><C.AlertText><C.AlertTitle>ATENÇÃO:</C.AlertTitle> PREENCHA TODOS OS CAMPOS</C.AlertText></C.AlertContainer>
+                
             }
 
 

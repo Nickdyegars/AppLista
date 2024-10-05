@@ -4,6 +4,7 @@ import styled from "styled-components/native";
 export const Container = styled.View`
   padding: 0 10px;
   margin-top: 30px;
+  margin-bottom: 15px;
 `
 
 export const InputBox = styled.View` 
@@ -15,6 +16,7 @@ export const TextInp = styled.Text`
   color: #fff;
   font-size: 18px;
   padding-left: 15px;
+  margin-bottom: 6px;
 
 `
 
@@ -57,3 +59,21 @@ export const ButtonTask = styled.TouchableOpacity`
   border-radius: 40px;
 
 `
+
+
+export const AlertContainer = styled.View`
+  background-color: #ff9999;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 5px;
+
+`;
+
+export const AlertText = styled.Text`
+  color: #000;
+`;
+
+export const AlertTitle = styled.Text`
+  color: #000;
+  font-weight: bold; 
+`;
