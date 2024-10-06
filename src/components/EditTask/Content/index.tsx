@@ -140,6 +140,7 @@ export const Content = () => {
                     height={56}
                     onChangeText={t => setTitleTask(t)}
                     value={titleTask}
+                    maxLength={16}
                 />
             </C.InputBox>
 
