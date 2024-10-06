@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+
 export const Content = () => {
 
 
@@ -131,6 +132,7 @@ export const Content = () => {
 
     return (
         <KeyboardAwareScrollView>
+            
         <C.Container>
 
             <C.InputBox>

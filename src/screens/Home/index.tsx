@@ -156,10 +156,7 @@ export function Home() {
       paddingTop: 64,
       gap: 16,
     },
-    container2: {
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      gap: 16,
+    containerTask: {
       height: height - 300,
     },
     addButton: {
@@ -194,9 +191,9 @@ export function Home() {
         <CardNumber title={'Finalizadas'} num={closedTask} color={'#11ad8b'} />
       </View>
 
-      
-      <View style={styles.container2}>
-      <KeyboardAwareScrollView>
+
+      <View style={styles.containerTask}>
+        <KeyboardAwareScrollView>
           {taskData &&
             taskData.map((item, key) => (
               <Task
@@ -208,10 +205,9 @@ export function Home() {
               />
             ))
           }
-          
-      </KeyboardAwareScrollView>
-      </View>
 
+        </KeyboardAwareScrollView>
+      </View>
 
       <StatusBar style="auto" />
 
