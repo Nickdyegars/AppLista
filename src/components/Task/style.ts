@@ -10,6 +10,8 @@ export const Container = styled.View`
   border-radius: 4px;
   overflow: hidden;
   width: 95%;
+  margin: 0 auto;
+  margin-bottom: 10px;
   
 `;
 export const CenterContainer = styled.TouchableOpacity`

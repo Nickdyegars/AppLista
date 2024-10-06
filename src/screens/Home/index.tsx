@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, TouchableOpacity, View, Dimensions } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CardNumber } from '../../components/CardNumber';
 import { InputAddTask } from '../../components/EditText';
 import React, { useEffect, useState } from 'react';
@@ -30,7 +31,7 @@ export function Home() {
   const getData = async (): Promise<taskContent[]> => {
     try {
       const taskData = await AsyncStorage.getItem("task");
-      
+
       const taskItemsData = taskData ? JSON.parse(taskData) : [];
 
       return taskItemsData;
@@ -45,15 +46,15 @@ export function Home() {
       let totalTasks = taskData.length;
       let totalTasksOpen = taskData.filter((task) => task.status === false).length;
       let totalTasksCompleted = taskData.filter((task) => task.status === true).length;
-  
+
       setClosedTask(totalTasksCompleted);
       setOpenTask(totalTasksOpen);
       setAmountTask(totalTasks);
     }
-    
-    countTasks();  
 
-  },[taskData]);
+    countTasks();
+
+  }, [taskData]);
 
   // UseFocusEffect para garantir que os dados sejam buscados ao focar a tela
   useFocusEffect(
@@ -104,8 +105,8 @@ export function Home() {
 
   const handleSearch = (text: string) => {
     setSearchText(text);
-  
-    
+
+
     if (text.trim() === "") {
       setTaskData(originalTaskData);
       return;
@@ -116,7 +117,7 @@ export function Home() {
     );
 
 
-    setTaskData(filteredTasks); 
+    setTaskData(filteredTasks);
   };
 
   const handleCloseModal = () => {
@@ -137,13 +138,13 @@ export function Home() {
     setShowModal(true);
   }
 
-  const sortedTasks = (tasks) =>{
+  const sortedTasks = (tasks) => {
     tasks.sort((a, b) => {
       return a.status === b.status ? 0 : a.status ? 1 : -1;
     });
 
     return tasks;
-  } 
+  }
 
   const styles = StyleSheet.create({
     container: {
@@ -154,6 +155,12 @@ export function Home() {
       padding: 16,
       paddingTop: 64,
       gap: 16,
+    },
+    container2: {
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      gap: 16,
+      height: height - 300,
     },
     addButton: {
       position: "absolute",
@@ -187,17 +194,24 @@ export function Home() {
         <CardNumber title={'Finalizadas'} num={closedTask} color={'#11ad8b'} />
       </View>
 
-      {  taskData &&
-        taskData.map((item, key) => (
-          <Task
-            key={key}
-            taskData={item}
-            deleteTask={handleDeleteTask}
-            changeStatus={handleChageStatus}
-            showModalTask={handleShowModal}
-          />
-        ))
-      }
+      
+      <View style={styles.container2}>
+      <KeyboardAwareScrollView>
+          {taskData &&
+            taskData.map((item, key) => (
+              <Task
+                key={key}
+                taskData={item}
+                deleteTask={handleDeleteTask}
+                changeStatus={handleChageStatus}
+                showModalTask={handleShowModal}
+              />
+            ))
+          }
+          
+      </KeyboardAwareScrollView>
+      </View>
+
 
       <StatusBar style="auto" />
 
